@@ -1,0 +1,27 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Agilo API
+paths:
+  /upload:
+    post:
+      summary: Upload image
+      description: Uploading image to server and store it in aws s3 bucket
+      tags:
+        - Utility
+
+      requestBody:
+        content:
+          multipart/formdata:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+
+      responses:
+        "500":
+          description: Internal server error
+        "200":
+          description: upload successfully, will return a url of the uploaded resource

@@ -1,7 +1,7 @@
 const Koa = require("koa");
 const Router = require("koa-router");
 const koaBody = require("koa-body");
-const oas = require("koa-oas3");
+const { oas }= require("koa-oas3");
 
 const debug = require("debug")("index.js");
 const cors = require("@koa/cors");
@@ -14,6 +14,14 @@ app.use(cors());
 app.use(koaBody({ multipart: true }));
 app.use(router.routes());
 app.use(router.allowedMethods());
+
+app.use(
+  oas({
+    file: `${__dirname}/openapi.yaml`,
+    endpoint: "/openapi.json",
+    uiEndpoint: "/",
+  })
+);
 
 router.post("/upload", async (ctx) => {
   const file = ctx.request.files.image;
