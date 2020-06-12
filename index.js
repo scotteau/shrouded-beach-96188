@@ -1,7 +1,7 @@
 const Koa = require("koa");
 const Router = require("koa-router");
 const koaBody = require("koa-body");
-const { oas }= require("koa-oas3");
+const { oas } = require("koa-oas3");
 
 const debug = require("debug")("index.js");
 const cors = require("@koa/cors");
@@ -43,5 +43,5 @@ router.get("/upload", async (ctx) => {
 
 const PORT = 8888;
 app.listen(process.env.PORT || PORT, () => {
-  console.log("server started at ", PORT);
+  console.log("server started at ", process.env.PORT);
 });
