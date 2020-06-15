@@ -2,6 +2,11 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Agilo API
+servers:
+  - url: https://us-central1-agilo-47e6e.cloudfunctions.net/api
+    description: RESTful api based on Firebase & Firestore
+  - url: https://shrouded-beach-96188.herokuapp.com/
+    description: Heroku & AWS s3 image uploading
 paths:
   /upload:
     post:
@@ -14,14 +19,341 @@ paths:
         content:
           multipart/formdata:
             schema:
-              type: object
               properties:
                 image:
                   type: string
                   format: binary
+      responses:
+        500:
+          description: Internal server error
+        200:
+          description: upload successfully, will return a url of the uploaded resource
+
+  /users/{id}:
+    get:
+      summary: Load data after user logged in
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          description: ID of the logged in user
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Load this user's default workspace & projects under this workspace
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /projects/{id}:
+    get:
+      summary: Load all the tasks & columns under the selected project
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          description: ID of the selected project
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Load all the tasks & columns under the selected project
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      summary: Delete the project with id
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the selected project
+          schema:
+            type: string
+      responses:
+        200:
+          description: The selected project is successfully deleted
+    put:
+      summary: Update the project with id
+      tags:
+        - Project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the selected project
+          schema:
+            type: string
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              properties:
+                name:
+                  type: string
+                  description: name of the project
+                colorIndex:
+                  type: number
+                  description: index number for theme color
+                iconIndex:
+                  type: number
+                  description: index number for theme icon
+                activeUsers:
+                  type: array
+                  description: recent active users's ids
+                columnOrder:
+                  type: array
+                  description: columnIds in order
+      responses:
+        200:
+          description: The selected project has been updated
+
+  /workspaces/{id}:
+    get:
+      summary: get data of selected workspace & all the projects under this workspace
+      tags:
+        - Workspace
+      parameters:
+        - name: id
+          in: path
+          description: ID of the selected workspace
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Get data of the selected workspace & all the projects under this workspace
+
+  /projects:
+    post:
+      summary: Create new project
+      tags:
+        - Project
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              properties:
+                id:
+                  type: string
+                  description: generated shortId for this new project
+                name:
+                  type: string
+                  description: name of the newly created project
+                colorIndex:
+                  type: number
+                  description: index number for theme color
+                iconIndex:
+                  type: number
+                  description: index number for theme icon
+                workspace:
+                  type: string
+                  description: ID of the current workspace
+                projectOrder:
+                  type: array
+                  description: The array containing all the project ids in order for this workspace
+      responses:
+        201:
+          description: Created the new project successfully
+  /tasks:
+    post:
+      summary: Create new task
+      tags:
+        - Task
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              properties:
+                name:
+                  type: string
+                  description: name of the newly created task
+                description:
+                  type: string
+                  description: description for the newly created task
+                authorId:
+                  type: string
+                  description: the current user's id who created this task
+                projectId:
+                  type: string
+                  description: the id of the project where the task was created in
+                columnId:
+                  type: string
+                  description: the id of the column where the task was created in
+                taskIds:
+                  type: array
+                  description: the taskIds of all the tasks of the column
+      responses:
+        201:
+          description: Successfully created a new task
+  /projects/{projectId}/columns/{columnId}/tasks/{taskId}:
+    delete:
+      summary: Delete a task with id
+      tags:
+        - Task
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of the project where the task is in
+          required: true
+          schema:
+            type: string
+
+        - name: columnId
+          in: path
+          description: ID of the column where the task is in
+          required: true
+          schema:
+            type: string
+
+        - name: taskId
+          in: path
+          description: ID of the task to be deleted
+          required: true
+          schema:
+            type: string
 
       responses:
-        "500":
-          description: Internal server error
-        "200":
-          description: upload successfully, will return a url of the uploaded resource
+        200:
+          description: Successfully deleted the task.
+
+  /tasks/{taskId}:
+    put:
+      summary: Update a task with id
+      tags:
+        - Task
+      parameters:
+        - name: taskId
+          in: path
+          description: ID of the selected task
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              properties:
+                name:
+                  type: string
+                  description: Name of the task
+                isCompleted:
+                  type: boolean
+                  description: Is the task completed
+                description:
+                  type: string
+                  description: the description of the task
+                attachments:
+                  type: array
+                  description: the image urls of the task's attachments
+                assignedUserIds:
+                  type: array
+                  description: the ids of the users who were assigned to this task
+                dueDate:
+                  type: number
+                  description: the duedate of this task
+                likedBy:
+                  type: array
+                  description: the ids of all the users who liked this task
+                projectids:
+                  type: array
+                  description: the ids of all the projects the task belongs to
+      responses:
+        200:
+          description: The task has been successfully updated.
+
+  /columns:
+    post:
+      summary: Create a new column
+      tags:
+        - Column
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              properties:
+                title:
+                  type: string
+                  description: Title of the column
+                projectId:
+                  type: string
+                  description: the id of the project where the column was created
+                id:
+                  type: string
+                  description: the generated shortId for the newly created column
+      responses:
+        201:
+          description: The column has been created within the selected project
+
+  /projects/{projectId}/columns/{columnId}:
+    delete:
+      summary: delete a column under a project
+      tags:
+        - Column
+      parameters:
+        - name: projectid
+          in: path
+          description: ID of the selected project
+          schema:
+            type: string
+          required: true
+
+        - name: columnId
+          in: path
+          description: ID of the to be deleted column
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: The column is deleted.
+  /columns/{columnId}:
+    put:
+      summary: Update a column with id
+      tags:
+        - Column
+      parameters:
+        - name: columnId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the selected column
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              properties:
+                title:
+                  type: string
+                  description: title of the column
+                taskIds:
+                  type: array
+                  description: Ids of all the tasks within this column
+      responses:
+        200:
+          description: The column has been successfully updated.
+
+  /workspaces/{workspaceId}/members:
+    get:
+      summary: get all the members information in a workspace
+      tags:
+        - Workspace
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: all the members' info retrieved/
