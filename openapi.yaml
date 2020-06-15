@@ -19,10 +19,8 @@ paths:
         content:
           multipart/formdata:
             schema:
-              properties:
-                image:
-                  type: string
-                  format: binary
+              type: string
+              format: binary
       responses:
         500:
           description: Internal server error
@@ -97,7 +95,7 @@ paths:
         content:
           "application/json":
             schema:
-              properties:
+              example:
                 name:
                   type: string
                   description: name of the project
@@ -142,25 +140,26 @@ paths:
         content:
           "application/json":
             schema:
-              properties:
-                id:
-                  type: string
-                  description: generated shortId for this new project
-                name:
-                  type: string
-                  description: name of the newly created project
-                colorIndex:
-                  type: number
-                  description: index number for theme color
-                iconIndex:
-                  type: number
-                  description: index number for theme icon
-                workspace:
-                  type: string
-                  description: ID of the current workspace
-                projectOrder:
-                  type: array
-                  description: The array containing all the project ids in order for this workspace
+              items:
+                example:
+                  id:
+                    type: string
+                    description: generated shortId for this new project
+                  name:
+                    type: string
+                    description: name of the newly created project
+                  colorIndex:
+                    type: number
+                    description: index number for theme color
+                  iconIndex:
+                    type: number
+                    description: index number for theme icon
+                  workspace:
+                    type: string
+                    description: ID of the current workspace
+                  projectOrder:
+                    type: array
+                    description: The array containing all the project ids in order for this workspace
       responses:
         201:
           description: Created the new project successfully
@@ -173,25 +172,26 @@ paths:
         content:
           "application/json":
             schema:
-              properties:
-                name:
-                  type: string
-                  description: name of the newly created task
-                description:
-                  type: string
-                  description: description for the newly created task
-                authorId:
-                  type: string
-                  description: the current user's id who created this task
-                projectId:
-                  type: string
-                  description: the id of the project where the task was created in
-                columnId:
-                  type: string
-                  description: the id of the column where the task was created in
-                taskIds:
-                  type: array
-                  description: the taskIds of all the tasks of the column
+              items:
+                example:
+                  name:
+                    type: string
+                    description: name of the newly created task
+                  description:
+                    type: string
+                    description: description for the newly created task
+                  authorId:
+                    type: string
+                    description: the current user's id who created this task
+                  projectId:
+                    type: string
+                    description: the id of the project where the task was created in
+                  columnId:
+                    type: string
+                    description: the id of the column where the task was created in
+                  taskIds:
+                    type: array
+                    description: the taskIds of all the tasks of the column
       responses:
         201:
           description: Successfully created a new task
@@ -242,31 +242,32 @@ paths:
         content:
           "application/json":
             schema:
-              properties:
-                name:
-                  type: string
-                  description: Name of the task
-                isCompleted:
-                  type: boolean
-                  description: Is the task completed
-                description:
-                  type: string
-                  description: the description of the task
-                attachments:
-                  type: array
-                  description: the image urls of the task's attachments
-                assignedUserIds:
-                  type: array
-                  description: the ids of the users who were assigned to this task
-                dueDate:
-                  type: number
-                  description: the duedate of this task
-                likedBy:
-                  type: array
-                  description: the ids of all the users who liked this task
-                projectids:
-                  type: array
-                  description: the ids of all the projects the task belongs to
+              items:
+                example:
+                  name:
+                    type: string
+                    description: Name of the task
+                  isCompleted:
+                    type: boolean
+                    description: Is the task completed
+                  description:
+                    type: string
+                    description: the description of the task
+                  attachments:
+                    type: array
+                    description: the image urls of the task's attachments
+                  assignedUserIds:
+                    type: array
+                    description: the ids of the users who were assigned to this task
+                  dueDate:
+                    type: number
+                    description: the duedate of this task
+                  likedBy:
+                    type: array
+                    description: the ids of all the users who liked this task
+                  projectids:
+                    type: array
+                    description: the ids of all the projects the task belongs to
       responses:
         200:
           description: The task has been successfully updated.
@@ -332,13 +333,14 @@ paths:
         content:
           "application/json":
             schema:
-              properties:
-                title:
-                  type: string
-                  description: title of the column
-                taskIds:
-                  type: array
-                  description: Ids of all the tasks within this column
+              items:
+                example:
+                  title:
+                    type: string
+                    description: title of the column
+                  taskIds:
+                    type: array
+                    description: Ids of all the tasks within this column
       responses:
         200:
           description: The column has been successfully updated.
