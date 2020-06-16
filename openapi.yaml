@@ -295,19 +295,12 @@ paths:
         201:
           description: The column has been created within the selected project
 
-  /projects/{projectId}/columns/{columnId}:
+  /columns/{columnId}:
     delete:
       summary: delete a column under a project
       tags:
         - Column
       parameters:
-        - name: projectid
-          in: path
-          description: ID of the selected project
-          schema:
-            type: string
-          required: true
-
         - name: columnId
           in: path
           description: ID of the to be deleted column
