@@ -295,7 +295,7 @@ paths:
         201:
           description: The column has been created within the selected project
 
- /columns/{columnId}:
+  /columns/{columnId}:
     delete:
       summary: delete a column under a project
       tags:
