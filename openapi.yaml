@@ -301,13 +301,6 @@ paths:
       tags:
         - Column
       parameters:
-        - name: projectid
-          in: path
-          description: ID of the selected project
-          schema:
-            type: string
-          required: true
-
         - name: columnId
           in: path
           description: ID of the to be deleted column
