@@ -163,38 +163,6 @@ paths:
       responses:
         201:
           description: Created the new project successfully
-  /tasks:
-    post:
-      summary: Create new task
-      tags:
-        - Task
-      requestBody:
-        content:
-          "application/json":
-            schema:
-              items:
-                example:
-                  name:
-                    type: string
-                    description: name of the newly created task
-                  description:
-                    type: string
-                    description: description for the newly created task
-                  authorId:
-                    type: string
-                    description: the current user's id who created this task
-                  projectId:
-                    type: string
-                    description: the id of the project where the task was created in
-                  columnId:
-                    type: string
-                    description: the id of the column where the task was created in
-                  taskIds:
-                    type: array
-                    description: the taskIds of all the tasks of the column
-      responses:
-        201:
-          description: Successfully created a new task
   /projects/{projectId}/columns/{columnId}/tasks/{taskId}:
     delete:
       summary: Delete a task with id
